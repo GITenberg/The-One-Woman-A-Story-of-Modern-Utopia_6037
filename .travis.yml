@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: bhyA/q+OW5F3znAmifE9LdN517A8uoK4A4WweuSk+7I0nBIMbkEPNQ7MXmLmr6j2KthAUSZkdU/KONBzWMzo4HRIFlML5A8Gp0CvxxmJ/10fL81cMJFiIiWY5pYs/rOm/sqWXJueryIyzG3SLO6DN1/SYdr/z2dlz2GXDxeYwHKI6zm1/8hUh5G1MrzjpIGetiX5wgjsdlV+8jl3q/ITItXwu9xdb2fnxMqvpHnZkNb3bMwcRPP5MJE51XM6cH7oCjE4nENL7xCj2uYgVfWhYwO8ZKx9R9YKcDepW19hFw4YIoDTOkczjjuvkTv87lToxvk5a7GtG0/n85TZK3p+76algg/045kfIVufHbVjqVenNOI24a0vG/yzstP705EtpsRTxLPbznNv5m4f6o7pirE8E6MBgd/HuElxh17IDMVk5g7TgmbaTQinQXpg3KM8C0foDWqnGXRZ+gSTANKGjODCtGt3lZPH047Vd5ni63eqXQDhJoVRbC/Dwx/BJeH0B8yXQjq4loMzSgAQgJtiYLFKfubZxOP7ciqE3OxNWKbA6kouQf7nvlPNuvGHc4YNpSjXoVBA60oOR+8yFGr/T273zVkOWYOOaARue0GdCZbNstWukCmMSj6dWQy3YNuLRAq6tuUPC3P0ItgpsFwd+D8EUGpqD5yzoY+aergBaTE=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/The-One-Woman-A-Story-of-Modern-Utopia_6037
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
