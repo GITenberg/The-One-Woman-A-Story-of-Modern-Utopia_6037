@@ -1,5 +1,5 @@
 _repo: The-One-Woman-A-Story-of-Modern-Utopia_6037
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -28,5 +28,6 @@ subjects:
 - !lcc 'PS'
 - !lcsh 'Utopias -- Fiction'
 - !lcsh 'Utopian fiction'
+- GITenberg
 title: 'The One Woman: A Story of Modern Utopia'
 url: http://www.gutenberg.org/ebooks/6037
